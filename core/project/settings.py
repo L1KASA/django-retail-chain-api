@@ -16,7 +16,7 @@ from pathlib import Path
 import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 env = environ.Env()
 
@@ -43,6 +43,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
+    "core.apps.retail.apps.RetailConfig",
+    "core.apps.catalog.apps.CatalogConfig",
+    "core.apps.inventory.apps.InventoryConfig",
+    "core.apps.users.apps.UsersConfig",
 ]
 
 MIDDLEWARE = [
@@ -55,7 +60,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "retail.urls"
+ROOT_URLCONF = 'core.project.urls'
 
 TEMPLATES = [
     {
@@ -72,7 +77,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "retail.wsgi.application"
+WSGI_APPLICATION = "core.project.wsgi.application"
 
 
 # Database
@@ -134,6 +139,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
