@@ -1,5 +1,5 @@
 from core.apps.common.exceptions import ServiceException
 
 
-class InventoryException(ServiceException):
+class CatalogException(ServiceException):
     pass

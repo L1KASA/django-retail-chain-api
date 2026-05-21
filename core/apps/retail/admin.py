@@ -1,5 +1,6 @@
 from django.contrib import admin
-from core.apps.retail.models import RetailPoint
+from core.apps.retail.models import Employee, RetailPoint
+
 
 @admin.register(RetailPoint)
 class RetailPointAdmin(admin.ModelAdmin):
@@ -11,6 +12,11 @@ class RetailPointAdmin(admin.ModelAdmin):
     search_fields = ('name', 'city', 'street')
     
     @admin.action(description='Очистить суточную выручку')
-    def clear_daily_revenue(self, request, queryset):
-        # TODO сделать очистку выручки. Метод из RevenueService
+    def clear_revenue(self, request, queryset):
+        # TODO: сделать очистку выручки. Метод из RevenueService
         pass
+
+@admin.register(Employee)
+class EmployeeAdmin(admin.ModelAdmin):
+    list_display = ('last_name', 'first_name', 'phone', 'email', 'retail_point')
+    raw_id_fields = ('user', 'retail_point')
