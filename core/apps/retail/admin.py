@@ -18,5 +18,6 @@ class RetailPointAdmin(admin.ModelAdmin):
 
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):
-    list_display = ('last_name', 'first_name', 'phone', 'email', 'retail_point')
+    list_display = ('last_name', 'first_name', 'phone', 'email', 'retail_point', 'api_key')
     raw_id_fields = ('user', 'retail_point')
+    readonly_fields = ('api_key',)

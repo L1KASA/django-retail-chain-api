@@ -6,7 +6,8 @@ from core.apps.retail.models import RetailPoint, Employee
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
-        fields = ('id', 'last_name', 'first_name', 'middle_name', 'phone', 'email')
+        fields = ('id', 'last_name', 'first_name', 'middle_name', 'phone', 'email', 'api_key')
+        read_only_fields = ('api_key',)
 
 
 class RetailPointSerializer(serializers.ModelSerializer):

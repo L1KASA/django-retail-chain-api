@@ -3,6 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
 
+from core.api.mixins import ApiKeyPermissionMixin
 from core.api.v1.retail.serializers import RetailPointSerializer
 from core.apps.retail.models import RetailPoint
 from core.apps.retail.selectors.retail_point import RetailPointSelector
@@ -11,12 +12,15 @@ from core.apps.retail.use_cases.clear_revenue import ClearRevenueUseCase
 from core.project.containers import get_container
 
 
-class RetailPointViewSet(viewsets.ModelViewSet):
+class RetailPointViewSet(ApiKeyPermissionMixin, viewsets.ModelViewSet):
     queryset = RetailPoint.objects.all()
     serializer_class = RetailPointSerializer
 
     def get_queryset(self):
         qs = super().get_queryset()
+        
+        if hasattr(self.request, 'employee'):
+            return qs.filter(id=self.request.employee.retail_point_id)
 
         city = self.request.GET.get('city')
         if city:

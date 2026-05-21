@@ -3,6 +3,7 @@ from django.conf import settings
 from core.apps.common.models import TimedBaseModel
 from django.db.models import Q
 from decimal import Decimal
+import uuid
 
 
 class RetailPoint(TimedBaseModel):
@@ -72,6 +73,12 @@ class Employee(TimedBaseModel):
         related_name='employee',
         verbose_name='Пользователь',
     )
+    api_key = models.UUIDField(
+        verbose_name='API-ключ',
+        default=uuid.uuid4,
+        unique=True,
+        editable=False,
+    )
     retail_point = models.ForeignKey(
         RetailPoint,
         on_delete=models.CASCADE,
@@ -95,13 +102,18 @@ class Employee(TimedBaseModel):
         verbose_name='Номер телефона',
         max_length=16,
     )
-    email = models.EmailField(
-        verbose_name='E-mail',
-    )
 
     class Meta:  # type: ignore[attr-defined]
         verbose_name = 'Сотрудник'
         verbose_name_plural = 'Сотрудники'
 
+    @property
+    def email(self) -> str:
+        return self.user.email
+    
+    @property
+    def full_name(self) -> str:
+        return f'{self.last_name} {self.first_name} {self.middle_name}'.strip()
+    
     def __str__(self):
-        return f'{self.last_name} {self.first_name} {self.middle_name} ({self.retail_point.name})'.strip()
+        return f'{self.full_name} ({self.retail_point.name})'

@@ -1,16 +1,20 @@
 from rest_framework import viewsets
 
+from core.api.mixins import ApiKeyPermissionMixin
 from core.api.v1.inventory.selectors.inventory import InventorySelector
 from core.api.v1.inventory.serializers import InventorySerializer
 from core.apps.inventory.models import Inventory
 
 
-class InventoryViewSet(viewsets.ModelViewSet):
+class InventoryViewSet(ApiKeyPermissionMixin, viewsets.ModelViewSet):
     queryset = Inventory.objects.all()
     serializer_class = InventorySerializer
 
     def get_queryset(self):
         qs = InventorySelector.get_all()
+
+        if hasattr(self.request, 'employee'):
+            return qs.filter(retail_point=self.request.employee.retail_point)
 
         product_id = self.request.GET.get('product_id')
         if product_id:
