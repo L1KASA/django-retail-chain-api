@@ -2,7 +2,7 @@ from celery import shared_task
 
 from core.project.containers import get_container
 from core.apps.inventory.use_cases.reduce_random_stock import ReduceRandomStockUseCase
-from core.apps.retail.models import RetailPoint, Employee
+from core.apps.retail.models import RetailPoint
 from django.core.mail import send_mail
 
 
@@ -14,7 +14,7 @@ def hourly_stock_reduction_task():
 
 
 @shared_task
-def send_low_stock_email_task(dealer_id: int, product_id: int):
+def send_low_stock_email_task(dealer_id: int, product_id: int) -> None:
     """Отправка email сотруднику головного отдела"""
     dealer = RetailPoint.objects.get(id=dealer_id)
     product = dealer.inventory_items.get(product_id=product_id).product

@@ -14,7 +14,7 @@ class IsActiveEmployee(permissions.BasePermission):
 
 
 class IsOwnerEmployee(permissions.BasePermission):
-    def has_permission(self, request, view):
+    def has_permission(self, request: Request, view: View) -> bool:
         api_key = request.headers.get('X-API-Key') or request.query_params.get('api_key')
         if not api_key:
             return False

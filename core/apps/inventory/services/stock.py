@@ -12,7 +12,7 @@ class StockService:
         return item.product.price * reduction
 
     @staticmethod
-    def replenish_zero_stock():
+    def replenish_zero_stock() -> int:
         items = Inventory.objects.filter(quantity=0)
         count = 0
         for item in items:

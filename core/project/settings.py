@@ -114,7 +114,7 @@ CELERY_BEAT_SCHEDULE = {
     },
     'hourly-stock-reduction': {
         'task': 'tasks.hourly.hourly_stock_reduction_task',
-        'schedule': crontab(minute=0),  # каждый час в :00
+        'schedule': crontab(minute=0),  # Каждый час в :00
     },
     'clear-all-revenue': {
         'task': 'tasks.daily.clear_all_revenue_task',

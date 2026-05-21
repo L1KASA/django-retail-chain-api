@@ -22,7 +22,7 @@ class RetailPointSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ('daily_revenue', 'created_at', 'updated_at')
 
-    def validate_name(self, value):
+    def validate_name(self, value: str) -> str:
         if len(value) > 50:
             raise serializers.ValidationError('Название не более 50 символов')
         return value

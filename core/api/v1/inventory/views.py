@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-
+from django.db.models import QuerySet
 from core.api.mixins import ApiKeyPermissionMixin
 from core.api.v1.inventory.selectors.inventory import InventorySelector
 from core.api.v1.inventory.serializers import InventorySerializer
@@ -10,7 +10,7 @@ class InventoryViewSet(ApiKeyPermissionMixin, viewsets.ModelViewSet):
     queryset = Inventory.objects.all()
     serializer_class = InventorySerializer
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Inventory]:
         qs = InventorySelector.get_all()
 
         if hasattr(self.request, 'employee'):
