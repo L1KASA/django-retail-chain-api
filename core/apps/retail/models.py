@@ -100,7 +100,7 @@ class Employee(TimedBaseModel):
     )
     phone = models.CharField(
         verbose_name='Номер телефона',
-        max_length=16,
+        max_length=20,
     )
 
     class Meta:  # type: ignore[attr-defined]

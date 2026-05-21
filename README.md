@@ -64,7 +64,7 @@ docker compose exec web python manage.py migrate retail zero
 ## Посев данных
 
 ```bash
-docker compose exec web python manage.py seed_data
+docker compose exec web python seed_data.py
 ```
 
 ## API
