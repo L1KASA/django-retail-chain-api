@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import os
 from pathlib import Path
-
+from celery.schedules import crontab
 import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -49,6 +49,11 @@ INSTALLED_APPS = [
     "core.apps.inventory.apps.InventoryConfig",
     "core.apps.users.apps.UsersConfig",
 ]
+
+CELERY_IMPORTS = (
+    'tasks.daily',
+    'tasks.hourly',
+)
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -94,6 +99,28 @@ DATABASES = {
     }
 }
 
+# Celery
+
+CELERY_BROKER_URL = env('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND')
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+
+CELERY_BEAT_SCHEDULE = {
+    'replenish-zero-stock': {
+        'task': 'tasks.daily.replenish_zero_stock_task',
+        'schedule': crontab(hour=9, minute=0),
+    },
+    'hourly-stock-reduction': {
+        'task': 'tasks.hourly.hourly_stock_reduction_task',
+        'schedule': crontab(minute=0),  # каждый час в :00
+    },
+    'clear-all-revenue': {
+        'task': 'tasks.daily.clear_all_revenue_task',
+        'schedule': crontab(hour=21, minute=15),
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -151,3 +178,5 @@ REST_FRAMEWORK = {
         'core.api.permissions.IsActiveEmployee',
     ],
 }
+
+EMAIL_BACKEND = env('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')

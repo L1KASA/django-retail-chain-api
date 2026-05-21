@@ -1,5 +1,6 @@
 from django.contrib import admin
 from core.apps.retail.models import Employee, RetailPoint
+from core.apps.retail.use_cases.clear_revenue import ClearRevenueUseCase
 
 
 @admin.register(RetailPoint)
@@ -13,8 +14,14 @@ class RetailPointAdmin(admin.ModelAdmin):
     
     @admin.action(description='Очистить суточную выручку')
     def clear_revenue(self, request, queryset):
-        # TODO: сделать очистку выручки. Метод из RevenueService
-        pass
+        from core.project.containers import get_container
+        
+        container = get_container()
+        use_case = container.resolve(ClearRevenueUseCase)
+        result = use_case.execute(list(queryset.values_list('id', flat=True)))
+        self.message_user(request, result['status'])
+
+    actions = ['clear_revenue']
 
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):
