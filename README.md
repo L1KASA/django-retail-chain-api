@@ -25,10 +25,11 @@ cd django-retail-chain-api
 cp .env.example .env
 ```
 
-### 3. Запустить контейнеры
+### 3. Запустить контейнеры (либо пересобрать)
 
 ```bash
-docker compose up -d
+docker compose up -d  # запустить существующие образы
+docker compose up -d  --build  # если нужно пересобрать
 ```
 ### 4. Применить миграции
 
@@ -39,6 +40,10 @@ docker compose exec web python manage.py migrate
 
 ```bash
 docker compose exec web python manage.py createsuperuser
+```
+### 6. Сделать посев данных
+```bash
+docker compose exec web python seed_data.py
 ```
 
 ## Миграции
